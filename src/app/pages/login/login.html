@@ -1,0 +1,23 @@
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+  <h2>AssetTracker Login</h2>
+  
+  <form (ngSubmit)="onLogin()">
+    <div style="margin-bottom: 15px;">
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="email" name="email" required style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Lozinka:</label>
+      <input type="password" [(ngModel)]="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
+    </div>
+
+    @if (errorMessage()) {
+      <div style="color: red; margin-bottom: 15px;">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" [disabled]="isLoading()" style="padding: 10px 15px; background: #007bff; color: white; border: none; cursor: pointer;">
+      {{ isLoading() ? 'Prijavljivanje...' : 'Prijavi se' }}
+    </button>
+  </form>
+</div>
