@@ -1,23 +1,60 @@
-<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-  <h2>AssetTracker Login</h2>
-  
-  <form (ngSubmit)="onLogin()">
-    <div style="margin-bottom: 15px;">
-      <label>Email:</label>
-      <input type="email" [(ngModel)]="email" name="email" required style="width: 100%; padding: 8px; margin-top: 5px;">
-    </div>
+<main class="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-8 text-slate-100 sm:px-6">
+  <div class="pointer-events-none absolute -left-40 -top-40 size-[28rem] rounded-full bg-indigo-600/10 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-48 -right-32 size-[32rem] rounded-full bg-violet-600/10 blur-3xl"></div>
 
-    <div style="margin-bottom: 15px;">
-      <label>Lozinka:</label>
-      <input type="password" [(ngModel)]="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
-    </div>
+  <div class="relative grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-800/90 bg-slate-900/70 shadow-2xl shadow-black/30 lg:min-h-[620px] lg:grid-cols-[1.05fr_0.95fr]">
+    <section class="relative hidden flex-col justify-between overflow-hidden border-r border-slate-800/80 bg-slate-900/70 p-10 lg:flex xl:p-12">
+      <div class="pointer-events-none absolute -right-24 top-28 size-72 rounded-full border border-indigo-400/10"></div>
+      <div class="pointer-events-none absolute -right-12 top-40 size-48 rounded-full border border-indigo-400/10"></div>
+      <div class="pointer-events-none absolute right-16 top-52 size-16 rounded-2xl border border-indigo-300/20 bg-indigo-400/5 rotate-12"></div>
 
-    @if (errorMessage()) {
-      <div style="color: red; margin-bottom: 15px;">{{ errorMessage() }}</div>
-    }
+      <a href="/login" class="relative flex w-fit items-center gap-3">
+        <span class="grid size-11 place-items-center rounded-xl bg-indigo-500 text-white shadow-lg shadow-indigo-950/60">
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4.5 7.8 7.5 4.3 7.5-4.3M12 12v9"/></svg>
+        </span>
+        <span><span class="block text-sm font-semibold tracking-wide text-white">AssetFlow</span><span class="text-xs text-slate-500">Upravljanje opremom</span></span>
+      </a>
 
-    <button type="submit" [disabled]="isLoading()" style="padding: 10px 15px; background: #007bff; color: white; border: none; cursor: pointer;">
-      {{ isLoading() ? 'Prijavljivanje...' : 'Prijavi se' }}
-    </button>
-  </form>
-</div>
+      <div class="relative my-12 max-w-md">
+        <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-400/15 bg-indigo-400/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-200"><span class="size-1.5 rounded-full bg-indigo-400"></span>Kontrola u jednom prostoru</div>
+        <h1 class="text-4xl font-semibold leading-[1.12] tracking-tight text-white xl:text-5xl">Sva oprema.<br><span class="text-indigo-300">Jasan pregled.</span></h1>
+        <p class="mt-5 max-w-sm text-sm leading-6 text-slate-400">Pratite resurse, zaduženja i promene kroz jednostavan pregled napravljen za vaš tim.</p>
+
+        <div class="mt-10 rounded-2xl border border-slate-700/70 bg-slate-950/50 p-4 shadow-xl shadow-black/10">
+          <div class="mb-4 flex items-center justify-between"><div class="flex items-center gap-2"><span class="size-2 rounded-full bg-emerald-400"></span><span class="text-[11px] font-medium text-slate-300">Pregled inventara</span></div><span class="rounded-md border border-slate-700 px-2 py-1 text-[9px] text-slate-500">DANAS</span></div>
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-2.5"><span class="grid size-8 place-items-center rounded-lg bg-indigo-500/10 text-indigo-300"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></span><span class="min-w-0 flex-1"><span class="block text-[11px] font-medium text-slate-200">MacBook Pro 14”</span><span class="mt-0.5 block font-mono text-[9px] text-slate-500">AST-00042</span></span><span class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 text-[9px] text-emerald-300">Aktivna</span></div>
+            <div class="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-2.5"><span class="grid size-8 place-items-center rounded-lg bg-violet-500/10 text-violet-300"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1m1-9 2 2 4-4"/></svg></span><span class="min-w-0 flex-1"><span class="block text-[11px] font-medium text-slate-200">Radna stanica</span><span class="mt-0.5 block font-mono text-[9px] text-slate-500">AST-00038</span></span><span class="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-1 text-[9px] text-indigo-300">Zadužena</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="relative text-[10px] tracking-wide text-slate-600">ASSETFLOW <span class="mx-2 text-slate-700">•</span> INVENTAR KOMPANIJE</p>
+    </section>
+
+    <section class="flex items-center justify-center px-5 py-10 sm:px-10 lg:px-9 xl:px-14">
+      <div class="w-full max-w-sm">
+        <a href="/login" class="mb-10 flex w-fit items-center gap-2.5 lg:hidden"><span class="grid size-9 place-items-center rounded-xl bg-indigo-500 text-white"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4.5 7.8 7.5 4.3 7.5-4.3M12 12v9"/></svg></span><span class="text-sm font-semibold text-white">AssetFlow</span></a>
+        <div class="mb-8"><p class="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-indigo-300">Dobro došli</p><h2 class="text-2xl font-semibold tracking-tight text-white sm:text-3xl">Prijavite se na nalog</h2><p class="mt-2 text-sm text-slate-400">Unesite podatke da biste nastavili u svoj radni prostor.</p></div>
+
+        @if (errorMessage()) {
+          <div role="alert" class="mb-5 flex gap-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 px-3.5 py-3 text-xs leading-relaxed text-rose-300"><svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg><span>{{ errorMessage() }}</span></div>
+        }
+
+        <form (ngSubmit)="onLogin()" class="space-y-5">
+          <div><label for="login-email" class="mb-2 block text-xs font-medium text-slate-300">Email adresa</label><div class="relative"><svg viewBox="0 0 24 24" class="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg><input id="login-email" type="email" [(ngModel)]="email" name="email" autocomplete="email" required placeholder="ime@kompanija.com" class="h-11 w-full rounded-xl border border-slate-700/80 bg-slate-950/60 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10"></div></div>
+          <div><div class="mb-2 flex items-center justify-between"><label for="login-password" class="block text-xs font-medium text-slate-300">Lozinka</label></div><div class="relative"><svg viewBox="0 0 24 24" class="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3m-4 5v2"/></svg><input id="login-password" type="password" [(ngModel)]="password" name="password" autocomplete="current-password" required placeholder="Unesite lozinku" class="h-11 w-full rounded-xl border border-slate-700/80 bg-slate-950/60 pl-10 pr-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/10"></div></div>
+          <button type="submit" [disabled]="isLoading()" class="group flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-950/40 transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-wait disabled:opacity-60">
+            @if (isLoading()) { <span class="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></span> }
+            {{ isLoading() ? 'Prijavljivanje...' : 'Prijavi se' }}
+            @if (!isLoading()) { <svg viewBox="0 0 24 24" class="size-4 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-6-6 6 6-6 6"/></svg> }
+          </button>
+        </form>
+
+        <div class="my-7 flex items-center gap-3"><span class="h-px flex-1 bg-slate-800"></span><span class="text-[10px] uppercase tracking-wider text-slate-600">Sigurna prijava</span><span class="h-px flex-1 bg-slate-800"></span></div>
+        <p class="flex items-center justify-center gap-2 text-[11px] text-slate-500"><svg viewBox="0 0 24 24" class="size-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>Vaša sesija je zaštićena</p>
+        <p class="mt-12 text-center text-[10px] text-slate-600 lg:hidden">ASSETFLOW <span class="mx-1">•</span> INVENTAR KOMPANIJE</p>
+      </div>
+    </section>
+  </div>
+</main>

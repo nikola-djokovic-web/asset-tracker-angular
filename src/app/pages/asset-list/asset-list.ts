@@ -18,6 +18,8 @@ import { AssignmentModalComponent } from './assignment-modal';
 export class AssetListComponent implements OnInit {
   assets = signal<Asset[]>([]);
   totalAssets = signal(0);
+  currentPage = signal(1);
+  lastPage = signal(1);
   isLoading = signal<boolean>(true);
   searchQuery = '';
   activeCount = computed(() => this.assets().filter(asset => asset.status === 'active').length);
@@ -40,12 +42,14 @@ export class AssetListComponent implements OnInit {
     this.loadAssets();
   }
 
-  loadAssets(): void {
+  loadAssets(page = 1): void {
     this.isLoading.set(true);
-    this.assetService.getAssets({ search: this.searchQuery }).subscribe({
+    this.assetService.getAssets({ search: this.searchQuery, page, per_page: 15 }).subscribe({
       next: (res:any) => {
         this.assets.set(res.data);
         this.totalAssets.set(res.meta?.total ?? res.data.length);
+        this.currentPage.set(res.meta?.current_page ?? page);
+        this.lastPage.set(res.meta?.last_page ?? 1);
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false)
@@ -78,7 +82,7 @@ export class AssetListComponent implements OnInit {
   handleSaved(): void {
     this.isAssetModalOpen.set(false);
     this.assignmentAsset.set(null);
-    this.loadAssets();
+    this.loadAssets(this.currentPage());
   }
 
   statusLabel(status: Asset['status']): string {
@@ -116,7 +120,10 @@ export class AssetListComponent implements OnInit {
       next: () => {
         this.isDeleting.set(false);
         this.assetPendingDelete.set(null);
-        this.loadAssets();
+        const targetPage = this.assets().length === 1 && this.currentPage() > 1
+          ? this.currentPage() - 1
+          : this.currentPage();
+        this.loadAssets(targetPage);
       },
       error: error => {
         this.isDeleting.set(false);
