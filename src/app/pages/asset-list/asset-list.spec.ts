@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AssetList } from './asset-list';
+import { AssetListComponent } from './asset-list';
 
-describe('AssetList', () => {
-  let component: AssetList;
-  let fixture: ComponentFixture<AssetList>;
+describe('AssetListComponent', () => {
+  let component: AssetListComponent;
+  let fixture: ComponentFixture<AssetListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AssetList],
+      imports: [AssetListComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AssetList);
+    fixture = TestBed.createComponent(AssetListComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
