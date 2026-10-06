@@ -5,7 +5,7 @@
         <span class="grid size-10 place-items-center rounded-xl bg-indigo-500 text-white shadow-lg shadow-indigo-950/60">
           <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4.5 7.8 7.5 4.3 7.5-4.3M12 12v9"/></svg>
         </span>
-        <span><span class="block text-sm font-semibold tracking-wide text-white">AssetFlow</span><span class="text-xs text-slate-500">Upravljanje opremom</span></span>
+        <span><span class="block text-sm font-semibold tracking-wide text-white">Asset Guard</span><span class="text-xs text-slate-500">Upravljanje opremom</span></span>
       </a>
 
       <div class="mt-12">
@@ -28,7 +28,7 @@
           <span class="grid size-9 place-items-center rounded-xl bg-indigo-500 text-white">
             <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"/><path d="m4.5 7.8 7.5 4.3 7.5-4.3M12 12v9"/></svg>
           </span>
-          <span class="text-sm font-semibold">AssetFlow</span>
+          <span class="text-sm font-semibold">Asset Guard</span>
         </div>
         <div class="hidden text-xs text-slate-500 sm:block">Radni prostor <span class="mx-2 text-slate-700">/</span><span class="text-slate-300">Oprema</span></div>
         <button (click)="logout()" class="ml-auto inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/70 px-3.5 py-2 text-xs font-medium text-slate-300 transition hover:border-slate-700 hover:bg-slate-800 hover:text-white">
@@ -111,7 +111,7 @@
           <div class="flex flex-col gap-3 border-t border-slate-800/80 px-5 py-3.5 text-[11px] text-slate-500 sm:flex-row sm:items-center sm:justify-between"><span>Prikazano <span class="font-medium text-slate-300">{{ assets().length }}</span> od <span class="font-medium text-slate-300">{{ totalAssets() }}</span> resursa</span><div class="flex items-center justify-between gap-2 sm:justify-end"><span class="mr-1">Strana {{ currentPage() }} od {{ lastPage() }}</span><button type="button" (click)="loadAssets(currentPage() - 1)" [disabled]="currentPage() <= 1 || isLoading()" aria-label="Prethodna strana" class="grid size-8 place-items-center rounded-lg border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 18-6-6 6-6"/></svg></button><button type="button" (click)="loadAssets(currentPage() + 1)" [disabled]="currentPage() >= lastPage() || isLoading()" aria-label="Sledeća strana" class="grid size-8 place-items-center rounded-lg border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"><svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6"/></svg></button></div></div>
         }
       </section>
-      <footer class="mt-5 flex justify-center text-[10px] tracking-wide text-slate-600">ASSETFLOW <span class="mx-2">•</span> PREGLED INVENTARA</footer>
+      <footer class="mt-5 flex justify-center text-[10px] tracking-wide text-slate-600">ASSETGUARD <span class="mx-2">•</span> PREGLED INVENTARA</footer>
     </main>
   </div>
 </div>
