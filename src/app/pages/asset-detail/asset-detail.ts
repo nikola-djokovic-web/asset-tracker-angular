@@ -1,10 +1,13 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Asset, Assignment } from '../../models/asset.model';
 import { AssetService } from '../../services/asset';
 import { AssetModalComponent } from '../asset-list/asset-modal';
 import { AssignmentModalComponent } from '../asset-list/assignment-modal';
+import { WebsocketService } from '../../services/websocket';
+import { AuthService } from '../../services/auth';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-asset-detail',
@@ -12,17 +15,38 @@ import { AssignmentModalComponent } from '../asset-list/assignment-modal';
   imports: [CommonModule, DatePipe, AssetModalComponent, AssignmentModalComponent],
   templateUrl: './asset-detail.html'
 })
-export class AssetDetailComponent implements OnInit {
+export class AssetDetailComponent implements OnInit, OnDestroy {
   asset = signal<Asset | null>(null);
   history = signal<Assignment[]>([]);
   isLoading = signal(true);
   errorMessage = signal('');
   isEditOpen = signal(false);
   assignmentMode = signal<'checkout' | 'checkin' | null>(null);
+  private websocketSub?: Subscription;
 
-  constructor(private route: ActivatedRoute, private router: Router, private assetService: AssetService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private assetService: AssetService,
+    private websocketService: WebsocketService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+    const tenantId = this.authService.currentUser()?.tenant_id;
+    if (tenantId !== undefined && tenantId !== null) {
+      this.websocketService.connectToTenant(tenantId);
+      this.websocketSub = this.websocketService.onAssetChanged().subscribe(event => {
+        if (String(this.asset()?.id) === String(event.asset_id)) this.load();
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.websocketSub?.unsubscribe();
+    this.websocketService.disconnect();
+  }
 
   load(): void {
     const id = this.route.snapshot.paramMap.get('id');

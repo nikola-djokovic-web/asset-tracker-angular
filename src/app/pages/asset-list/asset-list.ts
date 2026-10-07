@@ -1,10 +1,14 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 import { AssetService } from '../../services/asset';
 import { AuthService } from '../../services/auth';
+import { WebsocketService } from '../../services/websocket';
 import { Asset } from '../../models/asset.model';
-import { Router } from '@angular/router';
+
 import { AssetModalComponent } from './asset-modal';
 import { AssignmentModalComponent } from './assignment-modal';
 
@@ -15,37 +19,60 @@ import { AssignmentModalComponent } from './assignment-modal';
   templateUrl: './asset-list.html',
   styleUrl: './asset-list.css'
 })
-export class AssetListComponent implements OnInit {
+export class AssetListComponent implements OnInit, OnDestroy {
   assets = signal<Asset[]>([]);
   totalAssets = signal(0);
   currentPage = signal(1);
   lastPage = signal(1);
   isLoading = signal<boolean>(true);
   searchQuery = '';
+
   activeCount = computed(() => this.assets().filter(asset => asset.status === 'active').length);
   assignedCount = computed(() => this.assets().filter(asset => asset.status === 'assigned').length);
+
   editingAsset = signal<Asset | null>(null);
   isAssetModalOpen = signal(false);
+
   assignmentAsset = signal<Asset | null>(null);
   assignmentMode = signal<'checkout' | 'checkin'>('checkout');
+
   assetPendingDelete = signal<Asset | null>(null);
   isDeleting = signal(false);
   deleteError = signal('');
 
+  private websocketSub!: Subscription;
+
   constructor(
     private assetService: AssetService,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private websocketService: WebsocketService
   ) {}
 
   ngOnInit(): void {
     this.loadAssets();
+
+    const tenantId = this.authService.currentUser()?.tenant_id;
+    if (tenantId !== undefined && tenantId !== null) {
+      this.websocketService.connectToTenant(tenantId);
+      this.websocketSub = this.websocketService.onAssetChanged().subscribe(() => {
+        this.loadAssets(this.currentPage());
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Obavezno odjavljivanje da izbegnemo memory leak
+    if (this.websocketSub) {
+      this.websocketSub.unsubscribe();
+    }
+    this.websocketService.disconnect();
   }
 
   loadAssets(page = 1): void {
     this.isLoading.set(true);
     this.assetService.getAssets({ search: this.searchQuery, page, per_page: 15 }).subscribe({
-      next: (res:any) => {
+      next: (res: any) => {
         this.assets.set(res.data);
         this.totalAssets.set(res.meta?.total ?? res.data.length);
         this.currentPage.set(res.meta?.current_page ?? page);
@@ -57,7 +84,7 @@ export class AssetListComponent implements OnInit {
   }
 
   onSearch(): void {
-    this.loadAssets();
+    this.loadAssets(1);
   }
 
   openCreate(): void {
@@ -115,6 +142,7 @@ export class AssetListComponent implements OnInit {
   confirmDelete(): void {
     const asset = this.assetPendingDelete();
     if (!asset) return;
+
     this.isDeleting.set(true);
     this.assetService.deleteAsset(asset.id).subscribe({
       next: () => {
